@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { MongoError } from "mongodb";
-import { IApiResponse } from "@/types";
-import logger from "@/utils/logger";
+import { IApiResponse } from "@/types/index.js";
+import logger from "@/utils/logger.js";
 
 export class AppError extends Error {
   public statusCode: number;

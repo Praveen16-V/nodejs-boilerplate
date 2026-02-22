@@ -1,7 +1,7 @@
 import { Response, NextFunction } from "express";
-import { IAuthRequest } from "@/types";
-import { SecurityUtils } from "@/utils/security";
-import User from "@/models/User";
+import { IAuthRequest } from "@/types/index.js";
+import { SecurityUtils } from "@/utils/security.js";
+import User from "@/models/User.js";
 
 export const authenticate = async (
   req: IAuthRequest,
@@ -24,9 +24,7 @@ export const authenticate = async (
     try {
       const decoded = SecurityUtils.verifyJWT(token);
 
-      const user = await User.findById(decoded.userId).select(
-        "+emailVerified +isActive",
-      );
+      const user = await User.findById(decoded.userId.toString());
 
       if (!user) {
         res.status(401).json({
@@ -118,9 +116,7 @@ export const optionalAuth = async (
     try {
       const decoded = SecurityUtils.verifyJWT(token);
 
-      const user = await User.findById(decoded.userId).select(
-        "+emailVerified +isActive",
-      );
+      const user = await User.findById(decoded.userId.toString());
 
       if (user && user.isActive && user.emailVerified && !user.isLocked) {
         req.user = user;

@@ -6,7 +6,7 @@ import mongoSanitize from "express-mongo-sanitize";
 import xss from "xss";
 import hpp from "hpp";
 import compression from "compression";
-import config from "@/config";
+import config from "@/config/index.js";
 
 export const helmetConfig = helmet({
   contentSecurityPolicy: {

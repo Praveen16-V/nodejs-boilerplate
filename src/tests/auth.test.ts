@@ -1,6 +1,6 @@
 import request from "supertest";
-import app from "@/server";
-import User from "@/models/User";
+import app from "@/server.js";
+import User from "@/models/User.js";
 
 describe("Authentication Endpoints", () => {
   describe("POST /api/v1/auth/register", () => {
@@ -55,13 +55,12 @@ describe("Authentication Endpoints", () => {
 
   describe("POST /api/v1/auth/login", () => {
     beforeEach(async () => {
-      const user = new User({
+      await User.create({
         email: "test@example.com",
         password: "TestPass123!",
         firstName: "John",
         lastName: "Doe",
       });
-      await user.save();
     });
 
     it("should login successfully with valid credentials", async () => {
@@ -100,13 +99,12 @@ describe("Authentication Endpoints", () => {
     let authToken: string;
 
     beforeEach(async () => {
-      const user = new User({
+      await User.create({
         email: "test@example.com",
         password: "TestPass123!",
         firstName: "John",
         lastName: "Doe",
       });
-      await user.save();
 
       const loginResponse = await request(app).post("/api/v1/auth/login").send({
         email: "test@example.com",

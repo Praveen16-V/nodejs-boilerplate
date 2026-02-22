@@ -1,8 +1,13 @@
 import { Request } from "express";
-import { Document, Types, Model } from "mongoose";
+import { Document, Types } from "mongoose";
 
-export interface IUserModel extends Model<IUser> {
+export interface IUserModel {
+  new (): IUser;
+  create(data: any): Promise<IUser>;
   findByEmail(email: string): Promise<IUser | null>;
+  findByEmailWithPassword(email: string): Promise<IUser | null>;
+  findById(id: string): Promise<IUser | null>;
+  findByIdWithPassword(id: string): Promise<IUser | null>;
   findByEmailVerificationToken(token: string): Promise<IUser | null>;
   findByPasswordResetToken(token: string): Promise<IUser | null>;
 }
@@ -23,11 +28,13 @@ export interface IUser extends Document {
   lastLogin?: Date;
   loginAttempts?: number;
   lockUntil?: Date;
-  isLocked?: boolean;
+  isLocked: boolean;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
   incLoginAttempts(): Promise<void>;
+  handleFailedLogin(): Promise<void>;
+  handleSuccessfulLogin(): Promise<void>;
 }
 
 export interface IAuthRequest extends Request {

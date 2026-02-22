@@ -3,9 +3,9 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import config from "@/config";
-import database from "@/config/database";
-import logger from "@/utils/logger";
+import config from "@/config/index.js";
+import database from "@/config/database.js";
+import logger from "@/utils/logger.js";
 import {
   helmetConfig,
   corsConfig,
@@ -17,9 +17,9 @@ import {
   addSecurityHeaders,
   validateContentType,
   requestSizeLimit,
-} from "@/middleware/security";
-import { errorHandler, notFoundHandler } from "@/middleware/errorHandler";
-import routes from "@/routes";
+} from "@/middleware/security.js";
+import { errorHandler, notFoundHandler } from "@/middleware/errorHandler.js";
+import routes from "@/routes/index.js";
 
 const app = express();
 
@@ -146,7 +146,7 @@ const startServer = async (): Promise<void> => {
   }
 };
 
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   void startServer();
 }
 

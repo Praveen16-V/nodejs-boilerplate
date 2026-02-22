@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import config from "@/config";
-import { IJWTPayload } from "@/types";
+import config from "@/config/index.js";
+import { IJWTPayload } from "@/types/index.js";
 
 export class SecurityUtils {
   static async hashPassword(password: string): Promise<string> {

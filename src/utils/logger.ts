@@ -1,22 +1,22 @@
-import winston from 'winston';
-import config from '@/config';
+import winston from "winston";
+import config from "@/config/index.js";
 
 const logger = winston.createLogger({
   level: config.logLevel,
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
-    winston.format.json()
+    winston.format.json(),
   ),
-  defaultMeta: { service: 'secure-nodejs-app' },
+  defaultMeta: { service: "secure-nodejs-app" },
   transports: [
-    new winston.transports.File({ 
-      filename: 'logs/error.log', 
-      level: 'error',
+    new winston.transports.File({
+      filename: "logs/error.log",
+      level: "error",
       maxsize: 5242880, // 5MB
       maxFiles: 5,
     }),
-    new winston.transports.File({ 
+    new winston.transports.File({
       filename: config.logFile,
       maxsize: 5242880, // 5MB
       maxFiles: 5,
@@ -24,13 +24,15 @@ const logger = winston.createLogger({
   ],
 });
 
-if (config.nodeEnv !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.simple()
-    )
-  }));
+if (config.nodeEnv !== "production") {
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple(),
+      ),
+    }),
+  );
 }
 
 export default logger;

@@ -1,45 +1,42 @@
-import { Router } from 'express';
-import * as authController from '@/controllers/authController';
-import { authenticate } from '@/middleware/auth';
-import { 
-  registerValidation, 
-  loginValidation, 
-  changePasswordValidation 
-} from '@/utils/validation';
-import { handleValidationErrors } from '@/middleware/validation';
-import { authRateLimiter } from '@/middleware/security';
+import { Router } from "express";
+import * as authController from "@/controllers/authController.js";
+import { authenticate } from "@/middleware/auth.js";
+import {
+  registerValidation,
+  loginValidation,
+  changePasswordValidation,
+} from "@/utils/validation.js";
+import { handleValidationErrors } from "@/middleware/validation.js";
+import { authRateLimiter } from "@/middleware/security.js";
 
 const router = Router();
 
-router.post('/register', 
+router.post(
+  "/register",
   authRateLimiter,
   registerValidation,
   handleValidationErrors,
-  authController.register
+  authController.register,
 );
 
-router.post('/login', 
+router.post(
+  "/login",
   authRateLimiter,
   loginValidation,
   handleValidationErrors,
-  authController.login
+  authController.login,
 );
 
-router.get('/profile', 
-  authenticate,
-  authController.getProfile
-);
+router.get("/profile", authenticate, authController.getProfile);
 
-router.post('/change-password', 
+router.post(
+  "/change-password",
   authenticate,
   changePasswordValidation,
   handleValidationErrors,
-  authController.changePassword
+  authController.changePassword,
 );
 
-router.post('/logout', 
-  authenticate,
-  authController.logout
-);
+router.post("/logout", authenticate, authController.logout);
 
 export default router;

@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import bcrypt from "bcryptjs";
-import { IUser, IUserModel } from "@/types";
-import config from "@/config";
+import { IUser, IUserModel } from "@/types/index.js";
+import config from "@/config/index.js";
 
 const userSchema = new Schema<IUser>(
   {
@@ -121,6 +121,21 @@ userSchema.methods["comparePassword"] = async function (
   return bcrypt.compare(candidatePassword, this.password);
 };
 
+userSchema.methods["handleFailedLogin"] = async function (
+  this: IUser & Document,
+): Promise<void> {
+  await this.incLoginAttempts();
+};
+
+userSchema.methods["handleSuccessfulLogin"] = async function (
+  this: IUser & Document,
+): Promise<void> {
+  return this.updateOne({
+    $unset: { lockUntil: 1, loginAttempts: 1 },
+    $set: { lastLogin: new Date() },
+  });
+};
+
 userSchema.methods["incLoginAttempts"] = async function (
   this: IUser & Document,
 ): Promise<void> {
@@ -144,6 +159,27 @@ userSchema.statics["findByEmail"] = function (
   email: string,
 ): Promise<(IUser & Document) | null> {
   return this.findOne({ email: email.toLowerCase() });
+};
+
+userSchema.statics["findByEmailWithPassword"] = function (
+  this: Model<IUser & Document>,
+  email: string,
+): Promise<(IUser & Document) | null> {
+  return this.findOne({ email: email.toLowerCase() }).select("+password");
+};
+
+userSchema.statics["findById"] = function (
+  this: Model<IUser & Document>,
+  id: string,
+): Promise<(IUser & Document) | null> {
+  return this.findById(id);
+};
+
+userSchema.statics["findByIdWithPassword"] = function (
+  this: Model<IUser & Document>,
+  id: string,
+): Promise<(IUser & Document) | null> {
+  return this.findById(id).select("+password");
 };
 
 userSchema.statics["findByEmailVerificationToken"] = function (

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Production-grade TypeScript Node.js application with security best practices",
   "main": "dist/server.js",
+  "type": "module",
   "scripts": {
     "build": "tsc && tsc-alias",
     "start": "node run.js",
