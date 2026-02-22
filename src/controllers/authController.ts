@@ -1,9 +1,6 @@
 import { Response } from "express";
-import {
-  IAuthRequest,
-  IApiResponse,
-  IPasswordChangeRequest,
-} from "@/types/index.js";
+import { IAuthRequest, IApiResponse } from "@/types/index.js";
+import { ChangePasswordInput } from "@/utils/validation.js";
 import { AuthService } from "@/services/authService.js";
 import { asyncHandler } from "@/middleware/errorHandler.js";
 
@@ -52,7 +49,7 @@ export const getProfile = asyncHandler(
 
 export const changePassword = asyncHandler(
   async (req: IAuthRequest, res: Response): Promise<void> => {
-    const { currentPassword, newPassword }: IPasswordChangeRequest = req.body;
+    const { currentPassword, newPassword }: ChangePasswordInput = req.body;
     const userId = req.user!._id.toString();
 
     const result = await AuthService.changePassword(

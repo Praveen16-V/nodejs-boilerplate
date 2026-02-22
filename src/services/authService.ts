@@ -1,10 +1,10 @@
 import User from "@/models/User.js";
 import { SecurityUtils } from "@/utils/security.js";
 import { AppError } from "@/middleware/errorHandler.js";
-import { ILoginRequest, IRegisterRequest } from "@/types/index.js";
+import { LoginInput, RegisterInput } from "@/utils/validation.js";
 
 export class AuthService {
-  static async register(userData: IRegisterRequest) {
+  static async register(userData: RegisterInput) {
     const { email, password, firstName, lastName } = userData;
 
     // Check if user already exists
@@ -43,7 +43,7 @@ export class AuthService {
     };
   }
 
-  static async login(loginData: ILoginRequest) {
+  static async login(loginData: LoginInput) {
     const { email, password } = loginData;
 
     // Find user with password
